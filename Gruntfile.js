@@ -18,6 +18,11 @@ mappedEntries.push(...config.userstyles.map(url => {
 module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		concurrent: {
+			target: {
+				tasks: ['gitPull', 'userstyles']
+			}
+		},
 		gitPull: {
 			resources: {
 				repos: mappedRepos
@@ -41,6 +46,7 @@ module.exports = function(grunt) {
 		}
 	});
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-concurrent');
 	grunt.loadNpmTasks('grunt-gitPull');
 
 	grunt.registerMultiTask('userstyles', 'Retrieve css from userstyle.org', function () {
@@ -53,5 +59,5 @@ module.exports = function(grunt) {
 		}, done);
 	});
 
-	grunt.registerTask('default', ['gitPull', 'userstyles', 'cssmin']);
+	grunt.registerTask('default', ['concurrent', 'cssmin']);
 };

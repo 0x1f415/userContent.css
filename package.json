@@ -11,6 +11,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "grunt": "^1.0.1",
+    "grunt-concurrent": "^2.3.1",
     "grunt-contrib-cssmin": "^1.0.2",
     "grunt-gitpull": "^0.3.0",
     "request": "^2.79.0"
