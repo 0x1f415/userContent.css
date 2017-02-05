@@ -1,6 +1,6 @@
 # userContent.css
 
-grunt build process to retrieve, update, combine, and minify userstyles into one file. currently does not support theme options.
+grunt build process to retrieve, update, combine, and minify userstyles into one file. currently does not support theme options for userstyles.org themes.
 
 ## usage
 
