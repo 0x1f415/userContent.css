@@ -1,5 +1,6 @@
 /* jshint esversion: 6 */
 const fs = require('fs');
+const child_process = require('child_process');
 const async = require('async');
 const request = require('request');
 const config = require('./userContent.json');
@@ -43,6 +44,9 @@ module.exports = function(grunt) {
 					'build/userContent.css': mappedEntries
 				}
 			}
+		},
+		rebuild: {
+			git: Object.keys(config.git).filter( a => config.git[a]['build.json'] )
 		}
 	});
 	grunt.loadNpmTasks('grunt-contrib-cssmin');
@@ -59,5 +63,21 @@ module.exports = function(grunt) {
 		}, done);
 	});
 
-	grunt.registerTask('default', ['concurrent', 'cssmin']);
+	grunt.registerMultiTask('rebuild', 'Configure themes that can be configured with a build.json', function () {
+		var done = this.async();
+		async.forEach(this.data, (style, callback) => {
+			const styledir = './resources/' + style + '/';
+			fs.writeFileSync(styledir + 'build.json', JSON.stringify(config.git[style]['build.json']));
+			child_process.execSync('git reset --hard HEAD && npm install && grunt', { cwd: styledir });
+			const mostRecent = fs.readdirSync(styledir)
+				.filter( file => /\.css$/.test(file) )
+				.map( file => { return { name: file, mtime: fs.statSync(styledir + file).mtime}; } )
+				.sort()
+				.pop();
+			fs.writeFileSync(styledir + config.git[style].entry, fs.readFileSync(styledir + mostRecent.name));
+			return callback();
+		}, done);
+	});
+
+	grunt.registerTask('default', ['concurrent', 'rebuild', 'cssmin']);
 };
