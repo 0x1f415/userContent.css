@@ -66,6 +66,7 @@ module.exports = function(grunt) {
 	grunt.registerMultiTask('rebuild', 'Configure themes that can be configured with a build.json', function () {
 		var done = this.async();
 		async.forEach(this.data, (style, callback) => {
+			grunt.log.writeln('building ' + style);
 			const styledir = './resources/' + style + '/';
 			fs.writeFileSync(styledir + 'build.json', JSON.stringify(config.git[style]['build.json']));
 			child_process.execSync('git reset --hard HEAD && npm install && grunt ' + (config.git[style].grunt || ''), { cwd: styledir });
