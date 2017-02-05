@@ -68,7 +68,7 @@ module.exports = function(grunt) {
 		async.forEach(this.data, (style, callback) => {
 			const styledir = './resources/' + style + '/';
 			fs.writeFileSync(styledir + 'build.json', JSON.stringify(config.git[style]['build.json']));
-			child_process.execSync('git reset --hard HEAD && npm install && grunt', { cwd: styledir });
+			child_process.execSync('git reset --hard HEAD && npm install && grunt ' + (config.git[style].grunt || ''), { cwd: styledir });
 			const mostRecent = fs.readdirSync(styledir)
 				.filter( file => /\.css$/.test(file) )
 				.map( file => { return { name: file, mtime: fs.statSync(styledir + file).mtime}; } )
