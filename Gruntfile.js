@@ -3,7 +3,7 @@ const fs = require('fs');
 const child_process = require('child_process');
 const async = require('async');
 const request = require('request');
-const config = require('./userContent.json');
+const config = require('./userContent.js');
 const mappedRepos =   Object.keys(config.git).map(function (style) {
 	return {
 		repo: config.git[style].repo,
