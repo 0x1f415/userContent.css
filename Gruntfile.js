@@ -20,8 +20,11 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 		concurrent: {
-			target: {
+			fetch: {
 				tasks: ['gitPull', 'userstyles']
+			},
+			rebuild: {
+				tasks: ['rebuild']
 			}
 		},
 		gitPull: {
@@ -58,6 +61,9 @@ module.exports = function(grunt) {
 		},
 		rebuild: {
 			git: Object.keys(config.git).filter( a => config.git[a]['build.json'] )
+		},
+		fixes: {
+			git: Object.keys(config.git).filter( a => config.git[a].fixes )
 		}
 	});
 	grunt.loadNpmTasks('grunt-postcss');
@@ -72,6 +78,17 @@ module.exports = function(grunt) {
 			request('https://userstyles.org/styles/' + id + '.css')
 				.pipe(fs.createWriteStream('resources/' + id + '.css'))
 				.on('finish', callback);
+		}, done);
+	});
+
+	grunt.registerMultiTask('fixes', 'Apply fixes to some files', function () {
+		var done = this.async();
+		async.forEach(this.data, (style, callback) => {
+			const styledir = './resources/' + style + '/';
+			const entry = config.git[style].entry;
+			const fixes = config.git[style].fixes;
+			if (fixes.header || fixes.footer) fs.writeFileSync(styledir + entry, (fixes.header || '') + fs.readFileSync(styledir + entry) + (fixes.footer || ''));
+			return callback();
 		}, done);
 	});
 
@@ -92,5 +109,5 @@ module.exports = function(grunt) {
 		}, done);
 	});
 
-	grunt.registerTask('default', ['concurrent', 'rebuild', 'concat', 'postcss']);
+	grunt.registerTask('default', ['concurrent:fetch', 'concurrent:rebuild', 'fixes', 'concat', 'postcss']);
 };
