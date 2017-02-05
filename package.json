@@ -16,6 +16,7 @@
     "grunt-contrib-cssmin": "^1.0.2",
     "grunt-gitpull": "^0.3.0",
     "grunt-postcss": "^0.8.0",
-    "mahogany": "0.0.2"
+    "mahogany": "0.0.2",
+    "request": "^2.79.0"
   }
 }
