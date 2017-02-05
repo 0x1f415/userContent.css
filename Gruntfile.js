@@ -72,7 +72,7 @@ module.exports = function(grunt) {
 			const mostRecent = fs.readdirSync(styledir)
 				.filter( file => /\.css$/.test(file) )
 				.map( file => { return { name: file, mtime: fs.statSync(styledir + file).mtime}; } )
-				.sort()
+				.sort((a, b) => a.mtime - b.mtime)
 				.pop();
 			fs.writeFileSync(styledir + config.git[style].entry, fs.readFileSync(styledir + mostRecent.name));
 			return callback();
