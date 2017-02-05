@@ -10,10 +10,12 @@
   "license": "ISC",
   "dependencies": {
     "async": "^2.1.4",
+    "cssnano": "^3.10.0",
     "grunt": "^1.0.1",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-cssmin": "^1.0.2",
     "grunt-gitpull": "^0.3.0",
-    "request": "^2.79.0"
+    "grunt-postcss": "^0.8.0",
+    "mahogany": "0.0.2"
   }
 }

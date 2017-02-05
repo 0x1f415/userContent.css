@@ -34,14 +34,25 @@ module.exports = function(grunt) {
 				urls: config.userstyles
 			}
 		},
-		cssmin: {
-			options: {
-				shorthandCompacting: false,
-				roundingPrecision: -1
-			},
+		concat: {
 			target: {
 				files: {
 					'build/userContent.css': mappedEntries
+				}
+			}
+		},
+		postcss: {
+			target: {
+				options: {
+					map: false, // inline sourcemaps
+					failOnError: true,
+					processors: [
+						require('mahogany')(),
+						require('cssnano')()
+					]
+				},
+				files: {
+					'build/userContent.css': 'build/userContent.css'
 				}
 			}
 		},
@@ -49,7 +60,8 @@ module.exports = function(grunt) {
 			git: Object.keys(config.git).filter( a => config.git[a]['build.json'] )
 		}
 	});
-	grunt.loadNpmTasks('grunt-contrib-cssmin');
+	grunt.loadNpmTasks('grunt-postcss');
+	grunt.loadNpmTasks('grunt-contrib-concat');
 	grunt.loadNpmTasks('grunt-concurrent');
 	grunt.loadNpmTasks('grunt-gitPull');
 
@@ -80,5 +92,5 @@ module.exports = function(grunt) {
 		}, done);
 	});
 
-	grunt.registerTask('default', ['concurrent', 'rebuild', 'cssmin']);
+	grunt.registerTask('default', ['concurrent', 'rebuild', 'concat', 'postcss']);
 };
