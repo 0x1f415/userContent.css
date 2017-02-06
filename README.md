@@ -52,4 +52,4 @@ module.exports = {
 
 you can also throw arbitrary files in the `userContent.css.d` directory and any css file in that directory will be included as well.
 
-then run `grunt` in the project root. it will create `build/userContent.css`.
+then run `grunt` in the project root. it will create `build/userContent.css`. this can then be copied or symlinked into your firefox profile ([more info](http://kb.mozillazine.org/UserContent.css)).
