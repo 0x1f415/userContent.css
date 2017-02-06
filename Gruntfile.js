@@ -16,7 +16,7 @@ if (config.git) Object.keys(config.git).map(style => 'resources/' + style + '/' 
 if (config.git) mappedEntries.push(...config.userstyles.map(url => {
 	return 'resources/' + /\/styles\/(\d+)\//.exec(url)[1] + '.css';
 }));
-if (fs.existSync('./userContent.css.d/')) mappedEntries.push(...fs.readdirSync('./userContent.css.d/').filter( file => /\.css$/.test(file) ).map(a => 'userContent.css.d/' + a));
+if (fs.existsSync('./userContent.css.d/')) mappedEntries.push(...fs.readdirSync('./userContent.css.d/').filter( file => /\.css$/.test(file) ).map(a => 'userContent.css.d/' + a));
 
 module.exports = function(grunt) {
 	grunt.initConfig({
