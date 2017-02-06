@@ -11,10 +11,12 @@ const mappedRepos =   Object.keys(config.git).map(function (style) {
 		dir: style
 	};
 });
-var mappedEntries = Object.keys(config.git).map(style => 'resources/' + style + '/' + config.git[style].entry);
-mappedEntries.push(...config.userstyles.map(url => {
+var mappedEntries = [];
+if (config.git) Object.keys(config.git).map(style => 'resources/' + style + '/' + config.git[style].entry);
+if (config.git) mappedEntries.push(...config.userstyles.map(url => {
 	return 'resources/' + /\/styles\/(\d+)\//.exec(url)[1] + '.css';
 }));
+if (fs.existSync('./userContent.css.d/')) mappedEntries.push(...fs.readdirSync('./userContent.css.d/').filter( file => /\.css$/.test(file) ).map(a => 'userContent.css.d/' + a));
 
 module.exports = function(grunt) {
 	grunt.initConfig({
