@@ -12,8 +12,8 @@ const mappedRepos =   Object.keys(config.git).map(function (style) {
 	};
 });
 var mappedEntries = [];
-if (config.git) Object.keys(config.git).map(style => 'resources/' + style + '/' + config.git[style].entry);
-if (config.git) mappedEntries.push(...config.userstyles.map(url => {
+if (config.git) mappedEntries.push( ...Object.keys(config.git).map(style => 'resources/' + style + '/' + config.git[style].entry) );
+if (config.userstyles) mappedEntries.push(...config.userstyles.map(url => {
 	return 'resources/' + /\/styles\/(\d+)\//.exec(url)[1] + '.css';
 }));
 if (fs.existsSync('./userContent.css.d/')) mappedEntries.push(...fs.readdirSync('./userContent.css.d/').filter( file => /\.css$/.test(file) ).map(a => 'userContent.css.d/' + a));
