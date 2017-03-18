@@ -2,3 +2,4 @@ build/
 resources/
 node_modules/
 userContent.js
+userContent.css.d/
