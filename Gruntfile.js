@@ -3,6 +3,7 @@ const fs = require('fs');
 const child_process = require('child_process');
 const async = require('async');
 const request = require('request');
+const glob = require('glob');
 const config = require('./userContent.js');
 const mappedRepos =   Object.keys(config.git).map(function (style) {
 	return {
@@ -16,7 +17,7 @@ if (config.git) mappedEntries.push( ...Object.keys(config.git).map(style => 'res
 if (config.userstyles) mappedEntries.push(...config.userstyles.map(url => {
 	return 'resources/' + /\/styles\/(\d+)\//.exec(url)[1] + '.css';
 }));
-if (fs.existsSync('./userContent.css.d/')) mappedEntries.push(...fs.readdirSync('./userContent.css.d/').filter( file => /\.css$/.test(file) ).map(a => 'userContent.css.d/' + a));
+if (fs.existsSync('./userContent.css.d/')) mappedEntries.push(...glob.sync('./userContent.css.d/**/*.css'));
 
 module.exports = function(grunt) {
 	grunt.initConfig({

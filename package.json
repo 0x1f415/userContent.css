@@ -11,6 +11,7 @@
   "dependencies": {
     "async": "^2.1.4",
     "cssnano": "^3.10.0",
+    "glob": "^7.1.1",
     "grunt": "^1.0.1",
     "grunt-concurrent": "^2.3.1",
     "grunt-contrib-concat": "^1.0.1",
