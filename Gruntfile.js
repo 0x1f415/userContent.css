@@ -25,9 +25,6 @@ module.exports = function(grunt) {
 		concurrent: {
 			fetch: {
 				tasks: ['gitPull', 'userstyles']
-			},
-			rebuild: {
-				tasks: ['rebuild']
 			}
 		},
 		gitPull: {
@@ -62,6 +59,9 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		hardreset: {
+			git: Object.keys(config.git)
+		},
 		rebuild: {
 			git: Object.keys(config.git).filter( a => config.git[a]['build.json'] )
 		},
@@ -95,6 +95,16 @@ module.exports = function(grunt) {
 		}, done);
 	});
 
+	grunt.registerMultiTask('hardreset', 'hard reset all git styles', function () {
+		var done = this.async();
+		async.forEach(this.data, (style, callback) => {
+			grunt.log.writeln('resetting ' + style);
+			const styledir = './resources/' + style + '/';
+			if (fs.existsSync(styledir)) child_process.execSync('git reset --hard HEAD', { cwd: styledir });
+			return callback();
+		}, done);
+	});
+
 	grunt.registerMultiTask('rebuild', 'Configure themes that can be configured with a build.json', function () {
 		var done = this.async();
 		async.forEach(this.data, (style, callback) => {
@@ -112,5 +122,5 @@ module.exports = function(grunt) {
 		}, done);
 	});
 
-	grunt.registerTask('default', ['concurrent:fetch', 'concurrent:rebuild', 'fixes', 'concat', 'postcss']);
+	grunt.registerTask('default', ['hardreset', 'concurrent:fetch', 'rebuild', 'fixes', 'concat', 'postcss']);
 };
